@@ -1,0 +1,11 @@
+{
+  "name": "p6_backend",
+  "version": "1.0.0",
+  "description": "backend of P6 Piiquante Openclassrooms",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sebastien Gautier",
+  "license": "ISC"
+}
