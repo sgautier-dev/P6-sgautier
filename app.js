@@ -16,13 +16,16 @@ mongoose.connect('mongodb+srv://seb-oc:seboc33@cluster0.uuh4q.mongodb.net/?retry
   .then(() => console.log('MongoDB connection successful !'))
   .catch(() => console.log('MongoDB connection failed !'));
 
-// Mounting stuffRouter at the '/api/stuff' path.
+
+// Mounting userRouter at the '/api/auth' path.
+const userRoutes = require('./routes/userRoute');
+app.use('/api/auth', userRoutes);
+
+  // Mounting stuffRouter at the '/api/stuff' path.
 // const stuffRoutes = require('./routes/stuff');
 // app.use('/api/stuff', stuffRoutes);
 
-// Mounting userRouter at the '/api/auth' path.
-// const userRoutes = require('./routes/user');
-// app.use('/api/auth', userRoutes);
+
 
 //provides utilities for working with file and directory paths
 // const path = require('path');
