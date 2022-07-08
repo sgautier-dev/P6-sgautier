@@ -1,3 +1,4 @@
+require('dotenv').config();// giving access to .env file variables
 const express = require('express');
 const app = express();
 
