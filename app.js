@@ -11,7 +11,7 @@ app.use(cors());
 
 // Add middleware for handling communication with MongoDB database
 const mongoose = require('mongoose');
-mongoose.connect('mongodb+srv://seb-oc:seboc33@cluster0.uuh4q.mongodb.net/?retryWrites=true&w=majority',
+mongoose.connect(process.env.MONGODB_CONNECT_STRING,
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('MongoDB connection successful !'))
@@ -22,15 +22,13 @@ mongoose.connect('mongodb+srv://seb-oc:seboc33@cluster0.uuh4q.mongodb.net/?retry
 const userRoutes = require('./routes/userRoute');
 app.use('/api/auth', userRoutes);
 
-  // Mounting stuffRouter at the '/api/stuff' path.
-// const stuffRoutes = require('./routes/stuff');
-// app.use('/api/stuff', stuffRoutes);
-
-
+  // Mounting sauceRouter at the '/api/sauce' path.
+const sauceRoutes = require('./routes/sauceRoute');
+app.use('/api/sauces', sauceRoutes);
 
 //provides utilities for working with file and directory paths
-// const path = require('path');
+const path = require('path');
 //serving images from a static directory
-// app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 module.exports = app;
