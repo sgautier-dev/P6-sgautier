@@ -87,9 +87,9 @@ exports.setLikeSauce = async (req, res, next) => {
     try {
         const sauce = await Sauce.findOne({ _id: req.params.id });
 
-        if (sauce.userId != req.auth.userId || req.body.userId != req.auth.userId) {
-            res.status(403).json({ message: 'Not authorized' });
-        } else {
+        // if (sauce.userId != req.auth.userId || req.body.userId != req.auth.userId) {
+        //     res.status(403).json({ message: 'Not authorized' });
+        // } else {
             const matchLiked = sauce.usersLiked.find(userLiked => {
                 return userLiked === req.body.userId;
             });
@@ -137,7 +137,7 @@ exports.setLikeSauce = async (req, res, next) => {
             } catch (error) {
                 res.status(400).json({ error })
             }
-        }
+        //}
     } catch (error) {
         res.status(500).json({ error });
     }
