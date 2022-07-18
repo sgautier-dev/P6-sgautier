@@ -1,4 +1,4 @@
-require('dotenv').config();// giving access to .env file variables
+require('dotenv').config();// access to .env file variables
 const express = require('express');
 const app = express();
 
@@ -8,7 +8,6 @@ app.use(express.json());
 // Add middleware for handling CORS requests from client browser
 const cors = require('cors');
 app.use(cors());
-
 // Add middleware for handling communication with MongoDB database
 const mongoose = require('mongoose');
 mongoose.connect(process.env.MONGODB_CONNECT_STRING,
@@ -18,14 +17,12 @@ mongoose.connect(process.env.MONGODB_CONNECT_STRING,
   .catch(() => console.log('MongoDB connection failed !'));
 
 
-// Mounting userRouter at the '/api/auth' path.
+// Mounting userRouter on '/api/auth' path.
 const userRoutes = require('./routes/userRoute');
 app.use('/api/auth', userRoutes);
-
-  // Mounting sauceRouter at the '/api/sauce' path.
+  // Mounting sauceRouter on '/api/sauce' path.
 const sauceRoutes = require('./routes/sauceRoute');
 app.use('/api/sauces', sauceRoutes);
-
 //provides utilities for working with file and directory paths
 const path = require('path');
 //serving images from a static directory

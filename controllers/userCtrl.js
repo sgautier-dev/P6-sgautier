@@ -2,13 +2,18 @@ const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-exports.signup = async (req, res, next) => {
+/**
+ * Creating a new user with email and password from body request data,
+ * salting and hashing the password using bcrypt
+ * @param req, res the HTTP request and response objects.
+ * @res setting HTTP response with status and json message
+ */
+exports.signup = async (req, res) => {
     try {
         //generate salt against possible rainbow table attacks 
         const salt = await bcrypt.genSalt(10);
         // Hash&Salt password
         const hashedPassword = await bcrypt.hash(req.body.password, salt);
-        console.log(hashedPassword);
         try {
             const user = new User({
                 email: req.body.email,
@@ -25,7 +30,16 @@ exports.signup = async (req, res, next) => {
     }
 };
 
-exports.login = async (req, res, next) => {
+/**
+ * Log a user checking email and password (with bcrypt) and signing
+ * a Token as response
+ * @param req, res the HTTP request and response objects.
+ * @res if user not found, invalid password or error 
+ * setting HTTP response with status and json message
+ * @res if ok sending reponse with status and json object 
+ * (userId and jsonwebtoken)
+ */
+exports.login = async (req, res) => {
     try {
         const user = await User.findOne({ email: req.body.email });
         if (!user) {
