@@ -9,7 +9,7 @@ const jwt = require('jsonwebtoken');
 module.exports = (req, res, next) => {
    try {
        const token = req.headers.authorization.split(' ')[1];//to retrieve without "Bearer" 
-       const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+       const decodedToken = jwt.verify(token, process.env.JWT_SECRET);// secret string from .env
        const userId = decodedToken.userId;
        req.auth = {
            userId: userId

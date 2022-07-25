@@ -49,6 +49,7 @@ const errorHandler = error => {
 
 const server = http.createServer(app);
 
+//setting callbacks on server errors and listening
 server.on('error', errorHandler);
 server.on('listening', () => {
   const address = server.address();
