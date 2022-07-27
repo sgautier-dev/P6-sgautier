@@ -132,7 +132,7 @@ exports.setLikeSauce = async (req, res, next) => {
         let message = '';
         switch (req.body.like) {
             case 1:
-                if (!matchLiked) {
+                if (!matchLiked && !matchDisliked) {
                     sauce.likes++;
                     sauce.usersLiked.push(req.body.userId);
                     message = 'Like added!';
@@ -155,7 +155,7 @@ exports.setLikeSauce = async (req, res, next) => {
                 }
                 break;
             case -1:
-                if (!matchDisliked) {
+                if (!matchDisliked && !matchLiked) {
                     sauce.dislikes++;
                     sauce.usersDisliked.push(req.body.userId);
                     message = 'Dislike added!';
