@@ -21,6 +21,20 @@ mongoose.connect(process.env.MONGODB_CONNECT_STRING,// connection string from .e
 const mongodbErrorHandler = require('mongoose-mongodb-errors');
 mongoose.plugin(mongodbErrorHandler);
 
+// Add middleware for securing HTTP headers
+const helmet = require('helmet');
+app.use(helmet({
+  crossOriginResourcePolicy: false,
+}));
+
+// Add middleware to prevent MongoDB Operator Injection, $ and . characters are removed completely
+const mongoSanitize = require('express-mongo-sanitize');
+app.use(mongoSanitize());
+
+// Add middleware to sanitize user input coming from POST body, GET queries, and url params
+const xss = require('xss-clean');
+app.use(xss());
+
 
 // Mounting userRouter on '/api/auth' path.
 const userRoutes = require('./routes/userRoute');
