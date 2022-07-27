@@ -18,7 +18,7 @@ schema
 const validator = require("email-validator");
 
 /**
- * Creating a new user with email and password from body request data,
+ * Creating a new user with email and password from body request data, email and pass should be valid,
  * salting and hashing the password using bcrypt
  * @param req, res the HTTP request and response objects.
  * @res setting HTTP response with status and json message
@@ -48,7 +48,7 @@ exports.signup = async (req, res) => {
                 res.status(400).end();
             }
             if (!schema.validate(req.body.password)) {
-                res.statusMessage = 'Password should be min 8 or max 100 chars, contains upper and lower cases and 2 digits';
+                res.statusMessage = 'Password should be min 8 and max 100 chars, contains upper and lower cases, no spaces and 2 digits';
                 res.status(400).end();
             }
         }

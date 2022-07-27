@@ -41,7 +41,7 @@ exports.getOneSauce = async (req, res, next) => {
 };
 
 /**
- * Modifying a sauce from DB, if file parsing multer object and creating imageUrl
+ * Modifying a sauce from DB, if file parsing multer object and creating imageUrl, old file is deleted
  * with no file using request body object, user needs authorization
  * @param req, res the HTTP request and response objects.
  * @res setting HTTP response with status and json message
@@ -51,14 +51,25 @@ exports.modifySauce = async (req, res, next) => {
         ...JSON.parse(req.body.sauce),
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ...req.body };
-
+    
     delete sauceObject._userId;// for security, preventing usage of another userId
+
     try {
         const sauce = await Sauce.findOne({ _id: req.params.id });
+        const filename = req.file ? sauce.imageUrl.split('/images/')[1] : '';
+
         if (sauce.userId != req.auth.userId) {
             res.status(403).json({ message: 'Not authorized' });
         } else {
             try {
+                //removing old file from images folder
+                if (filename) {
+                    fs.unlink(`images/${filename}`, (err) => {
+                        if (err) {
+                            console.log(err);
+                        }
+                    });
+                }
                 await Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id });
                 res.status(200).json({ message: 'Object modified!' });
             } catch (error) {
