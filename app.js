@@ -17,6 +17,10 @@ mongoose.connect(process.env.MONGODB_CONNECT_STRING,// connection string from .e
   .then(() => console.log('MongoDB connection successful !'))
   .catch(() => console.log('MongoDB connection failed !'));
 
+// add plugin for handling mongodb errors globally
+const mongodbErrorHandler = require('mongoose-mongodb-errors');
+mongoose.plugin(mongodbErrorHandler);
+
 
 // Mounting userRouter on '/api/auth' path.
 const userRoutes = require('./routes/userRoute');
