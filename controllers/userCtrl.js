@@ -2,6 +2,21 @@ const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+// add middleware to handle password validation
+const passwordValidator = require('password-validator');
+const schema = new passwordValidator();
+// Add properties to schema
+schema
+    .is().min(8)                                    // Minimum length 8
+    .is().max(100)                                  // Maximum length 100
+    .has().uppercase()                              // Must have uppercase letters
+    .has().lowercase()                              // Must have lowercase letters
+    .has().digits(2)                                // Must have at least 2 digits
+    .has().not().spaces();                          // Should not have spaces
+
+// add middleware to handle email validation
+const validator = require("email-validator");
+
 /**
  * Creating a new user with email and password from body request data,
  * salting and hashing the password using bcrypt
@@ -10,19 +25,32 @@ const jwt = require('jsonwebtoken');
  */
 exports.signup = async (req, res) => {
     try {
-        //generate salt against possible rainbow table attacks 
-        const salt = await bcrypt.genSalt(10);
-        // Hash&Salt password
-        const hashedPassword = await bcrypt.hash(req.body.password, salt);
-        try {
-            const user = new User({
-                email: req.body.email,
-                password: hashedPassword
-            });
-            await user.save();
-            res.status(201).json({ message: 'User created !' })
-        } catch (error) {
-            res.status(400).json({ error })
+
+        if (schema.validate(req.body.password) && validator.validate(req.body.email)) {
+            //generate salt against possible rainbow table attacks 
+            const salt = await bcrypt.genSalt(10);
+            // Hash&Salt password
+            const hashedPassword = await bcrypt.hash(req.body.password, salt);
+            try {
+                const user = new User({
+                    email: req.body.email,
+                    password: hashedPassword
+                });
+                await user.save();
+                res.status(201).json({ message: 'User created !' })
+            } catch (error) {
+                res.status(400).json({ error })
+            }
+
+        } else {
+            if (!validator.validate(req.body.email)) {
+                res.statusMessage = 'E-mail should be valid!';
+                res.status(400).end();
+            }
+            if (!schema.validate(req.body.password)) {
+                res.statusMessage = 'Password should be min 8 or max 100 chars, contains upper and lower cases and 2 digits';
+                res.status(400).end();
+            }
         }
 
     } catch (error) {
